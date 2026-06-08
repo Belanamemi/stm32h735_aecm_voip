@@ -1,0 +1,33 @@
+# Build artifacts
+build/
+build-debug/
+*.elf
+*.bin
+*.hex
+*.map
+*.lss
+
+# IDE
+.vscode/
+.idea/
+*.user
+*.cbp
+*.workspace
+
+# OS
+.DS_Store
+Thumbs.db
+.project
+.cproject
+.settings/
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Misc
+*.o
+*.a
+*.so

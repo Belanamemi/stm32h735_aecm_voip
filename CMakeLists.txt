@@ -1,54 +1,45 @@
-cmake_minimum_required(VERSION 3.20)
-project(stm32h735_aecm_voip C ASM)
+cmake_minimum_required(VERSION 3.15)
 
-set(CMAKE_C_STANDARD 11)
-set(CMAKE_C_STANDARD_REQUIRED ON)
-set(COMMON_FLAGS "-mcpu=cortex-m7 -mthumb -mfpu=fpv5-d16 -mfloat-abi=hard -Wall -Wextra")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${COMMON_FLAGS} -fdata-sections -ffunction-sections")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--gc-sections -Wl,--print-memory-usage")
+# Set build type
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose build type" FORCE)
+endif()
 
-# Directories
-include_directories(
-    ${CMAKE_SOURCE_DIR}/Core/Inc
-    ${CMAKE_SOURCE_DIR}/Drivers/CMSIS/Include
-    ${CMAKE_SOURCE_DIR}/Drivers/STM32H7xx_HAL_Driver/Inc
-    ${CMAKE_SOURCE_DIR}/Middlewares/NetX_DUO_6.4.0/inc
-    ${CMAKE_SOURCE_DIR}/Middlewares/Azure_RTOS/inc
-    ${CMAKE_SOURCE_DIR}/Middlewares/WebRTC/aecm/inc
-)
+if(CMAKE_BUILD_TYPE MATCHES Debug)
+    message(STATUS "[BUILD] Debug mode - Optimization: -O0")
+elseif(CMAKE_BUILD_TYPE MATCHES Release)
+    message(STATUS "[BUILD] Release mode - Optimization: -Os")
+endif()
 
-# Source files
-file(GLOB_RECURSE SOURCES
-    "Core/Src/*.c"
-    "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c"
-    "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.c"
-    "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_sai.c"
-    "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_eth.c"
-    "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c"
-    "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c"
-    "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c"
-)
+# Set CMake module search path
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/CMake/Modules)
 
-# Executable
-add_executable(aecm_voip.elf ${SOURCES})
+# Find tools
+find_package(Openocd)
+find_package(ArmToolchain REQUIRED)
+
+# Project settings
+set(APPLICATION_NAME "stm32h735_aecm_voip")
+set(DEVICE_FAMILY STM32H735xx)
+set(HSE_VALUE 25000000)  /* 25 MHz crystal on STM32H735G-DK */
+
+project(${APPLICATION_NAME} C CXX ASM)
 
 # Linker script
-target_link_options(aecm_voip.elf PRIVATE 
-    -T${CMAKE_SOURCE_DIR}/STM32H735IGKx_FLASH.ld
-    -Wl,-Map=${CMAKE_BINARY_DIR}/aecm_voip.map
-)
+get_filename_component(LINKER_SCRIPT linker/STM32H735IGKx_FLASH.ld ABSOLUTE)
 
-# Libraries
-target_link_libraries(aecm_voip.elf
-    m
-    c
-    nosys
-)
+# OpenOCD config
+get_filename_component(OPENOCD_CONFIG tools/stm32h735g-dk.cfg ABSOLUTE)
 
-# Post-build commands
-add_custom_command(TARGET aecm_voip.elf POST_BUILD
-    COMMAND ${CMAKE_OBJCOPY} -O ihex aecm_voip.elf aecm_voip.hex
-    COMMAND ${CMAKE_OBJCOPY} -O binary aecm_voip.elf aecm_voip.bin
-    COMMAND ${CMAKE_SIZE} aecm_voip.elf
-    COMMENT "Post-build: Generating .hex and .bin files"
-)
+# Add libraries
+add_subdirectory(lib)
+
+# Add source
+add_subdirectory(src)
+
+message(STATUS "========================================")
+message(STATUS "  Project: ${APPLICATION_NAME}")
+message(STATUS "  Device:  ${DEVICE_FAMILY}")
+message(STATUS "  HSE:     ${HSE_VALUE} Hz")
+message(STATUS "  Build:   ${CMAKE_BUILD_TYPE}")
+message(STATUS "========================================")
