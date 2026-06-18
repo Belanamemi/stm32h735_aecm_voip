@@ -1,6 +1,7 @@
 # Source files
 set(SOURCES
     main.c
+    stm32h7xx_hal_msp.c
     aecm_processor.c
     voip_codec_g711.c
     voip_rtp_handler.c
@@ -9,7 +10,7 @@ set(SOURCES
     dwt_delay_measurement.c
     itm_telemetry.c
     wm8994_codec.c
-    startup_stm32h735xx.s
+    startup_stm32h735igkx.s
 )
 
 # Optimization level
@@ -32,8 +33,6 @@ include_directories(
     ../Core/Inc
     ../lib/STM32H7xx_HAL_Driver/Inc
     ../lib/CMSIS/Inc
-    ../Middlewares/WebRTC/aecm/inc
-    ../Middlewares/NetX_DUO/inc
 )
 
 # Create ELF

@@ -40,11 +40,29 @@ SECTIONS
         . = ALIGN(4);
         _sbss = .;
         *(.bss*)
+        *(COMMON)
         . = ALIGN(4);
         _ebss = .;
     } >RAM_D1
 
-    .aec_buffers (NOLOAD) : { *(.aec_buffers) } >RAM_D2
-    .rtp_buffers (NOLOAD) : { *(.rtp_buffers) } >RAM_D3
-    .itcm : { *(.itcm*) } >ITCM AT >FLASH
+    /* AEC buffers in fast RAM_D2 */
+    .aec_buffers (NOLOAD) :
+    {
+        . = ALIGN(4);
+        *(.aec_buffers)
+        . = ALIGN(4);
+    } >RAM_D2
+
+    /* RTP/Jitter in RAM_D3 */
+    .rtp_buffers (NOLOAD) :
+    {
+        . = ALIGN(4);
+        *(.rtp_buffers)
+        . = ALIGN(4);
+    } >RAM_D3
+
+    /* Set end of heap for _sbrk */
+    end = .;
+    _end = .;
+    _estack = ORIGIN(RAM_D1) + LENGTH(RAM_D1);
 }

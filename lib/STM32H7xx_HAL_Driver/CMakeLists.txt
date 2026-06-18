@@ -10,6 +10,7 @@ set(DRIVER_SOURCES
     Src/stm32h7xx_hal_rcc.c
     Src/stm32h7xx_hal_uart.c
     Src/stm32h7xx_hal_cortex.c
+    Src/stm32h7xx_hal_rcc_ex.c
 )
 
 add_library(stm32h7xx_hal ${DRIVER_SOURCES})
