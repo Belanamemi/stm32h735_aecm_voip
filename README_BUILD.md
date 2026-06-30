@@ -327,12 +327,45 @@ arm-none-eabi-gcc --version
 
 ### OpenOCD connection failed
 ```bash
-# Check ST-Link connection
+# Check ST-Link connection #Утилита lsusb (от англ. list USB) — инструмент командной строки Linux, 
+#который выводит на экран информацию о подключенных к ПК устройствах USB. 
 lsusb | grep STMicroelectronics
 
 # Verify OpenOCD config
-opencd -f tools/stm32h735g-dk.cfg -c "init"
+$ openocd -f ../tools/stm32h735g-dk.cfg -c "init"
 ```
+📊Git Bash  Запуск из build
+$ openocd -f interface/stlink.cfg -f ../tools/stm32h735g-dk.cfg -c "init"
+Open On-Chip Debugger 0.12.0 (2023-01-14-23:37)
+Licensed under GNU GPL v2
+For bug reports, read
+        http://openocd.org/doc/doxygen/bugs.html
+Info : The selected transport took over low-level target control. The results might differ compared to plain JTAG/SWD
+Info : clock speed 2000 kHz
+Info : STLINK V3J16M7 (API v3) VID:PID 0483:374E
+Info : Target voltage: 3.267950
+Info : [stm32h7x.cpu0] Cortex-M7 r1p2 processor detected
+Info : [stm32h7x.cpu0] target has 8 breakpoints, 4 watchpoints
+Info : starting gdb server for stm32h7x.cpu0 on 3333
+Info : Listening on port 3333 for gdb connections
+[stm32h7x.cpu0] halted due to debug-request, current mode: Thread
+xPSR: 0x01000000 pc: 0x08001964 msp: 0x24050000
+Info : Listening on port 6666 for tcl connections
+Info : Listening on port 4444 for telnet connections
+shutdown command invoked
+
+
+User@BERDNIK-R351J2I MINGW64 /d/___NEW/in_CMAKE/stm32h735_aecm_voip_Git/build (main)
+
+📊Для прошивки из из build-debug:
+$ arm-none-eabi-gdb ../build-debug/src/stm32h735_aecm_voip.elf
+
+(gdb) target extended-remote :3333
+(gdb) monitor reset init
+(gdb) load
+(gdb) monitor reset halt
+(gdb) continue
+
 
 ### Linker errors
 - Check linker script: `linker/STM32H735IGKx_FLASH.ld`

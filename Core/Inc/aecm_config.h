@@ -9,7 +9,12 @@
 #define SAMPLE_RATE_HZ          8000
 #define FRAME_SIZE_SAMPLES      160      /* 20ms @ 8kHz */
 #define BYTES_PER_SAMPLE        2        /* 16-bit */
+#ifndef FRAME_SIZE_BYTES        //del    warning: 'FRAME_SIZE_BYTES' redefined 
 #define FRAME_SIZE_BYTES        (FRAME_SIZE_SAMPLES * BYTES_PER_SAMPLE)
+#endif
+#if (FRAME_SIZE_BYTES != (FRAME_SIZE_SAMPLES * BYTES_PER_SAMPLE))
+#error "Критический конфликт! FRAME_SIZE_BYTES определен в другом месте с другим размером!"
+#endif
 #define NUM_CHANNELS            2        /* Stereo: L/R */
 
 /* ====== AECM MODES ====== */

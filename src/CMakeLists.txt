@@ -8,8 +8,10 @@ set(SOURCES
     agc_preprocessor.c
     dwt_delay_measurement.c
     itm_telemetry.c
-    wm8994_codec.c
-    startup_stm32h735xx.s
+    syscalls.c
+	sysmem.c
+    stm32h7xx_hal_msp.c
+	../Core/Startup/startup_stm32h735igkx.s
 )
 
 # Optimization level
@@ -32,19 +34,24 @@ include_directories(
     ../Core/Inc
     ../lib/STM32H7xx_HAL_Driver/Inc
     ../lib/CMSIS/Inc
+    ../lib/BSP/Components/WM8994
     ../Middlewares/WebRTC/aecm/inc
-    ../Middlewares/NetX_DUO/inc
+
 )
 
 # Create ELF
 add_executable(${ELF_FILE} ${SOURCES})
 
-# Link libraries
+ #aecm_h7    netxduo
+# Link libraries BAA Флаг nosys.specs подключает заглушки для этих функций.
 target_link_libraries(${ELF_FILE} PUBLIC
     stm32h7xx_hal
     cmsis_h7
     m
     c
+    netxduo
+    aecm_h7
+    bsp_h7
     nosys
 )
 
@@ -54,7 +61,7 @@ target_compile_options(${ELF_FILE} PRIVATE
     -Wall -Wextra
 )
 
-# Linker flags
+# Linker flags   BAA --specs=nano.specs
 target_link_options(${ELF_FILE} PRIVATE
     -T${LINKER_SCRIPT}
     -Wl,-Map=${MAP_FILE},--cref,--no-warn-mismatch

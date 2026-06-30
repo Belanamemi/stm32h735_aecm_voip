@@ -1,4 +1,7 @@
 /* STM32H735IGK6 Flash Linker Script */
+
+
+/* Specify the memory areas */
 MEMORY
 {
   FLASH (rx)      : ORIGIN = 0x08000000, LENGTH = 2048K
@@ -60,14 +63,9 @@ SECTIONS
     . = ALIGN(4);
   } >RAM_D3
 
-  /* ITCM for tight loops */
-  .itcm :
-  {
-    . = ALIGN(4);
-    *(.itcm*)
-    . = ALIGN(4);
-  } >ITCM AT >FLASH
-  _itcm_load = LOADADDR(.itcm);
-  _itcm_start = ADDR(.itcm);
-  _itcm_end = . ;
+   /* Set end of heap for _sbrk */
+    end = .;
+    _end = .;
+    _estack = ORIGIN(RAM_D1) + LENGTH(RAM_D1);
+  
 }

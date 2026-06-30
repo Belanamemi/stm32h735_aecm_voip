@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE QtCreatorProject>
-<!-- Write only settings of whole project "stm32h735_aecm_voip" here (some of them). Project-wide
-     settings go into share/qtcreator/profiles, global user settings into
-     .config/QtProject/qtcreator, local user settings into .config/QtProject/qtcreator/local. -->
-<qtcreator>
- </qtcreator>

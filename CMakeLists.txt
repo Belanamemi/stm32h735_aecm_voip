@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.20)
 
 # Set build type
 if(NOT CMAKE_BUILD_TYPE)
@@ -19,14 +19,21 @@ find_package(Openocd)
 find_package(ArmToolchain REQUIRED)
 
 # Project settings
+
+#set(CMAKE_SYSTEM_NAME Generic) 
+#set(CMAKE_C_COMPILER_WORKS 1)
+#set(CMAKE_CXX_COMPILER_WORKS 1)
+#set(CMAKE_DETERMINE_ASM_ABI_COMPILED 1)
+
+
 set(APPLICATION_NAME "stm32h735_aecm_voip")
 set(DEVICE_FAMILY STM32H735xx)
-set(HSE_VALUE 25000000)  /* 25 MHz crystal on STM32H735G-DK */
+set(HSE_VALUE 25000000)  
 
 project(${APPLICATION_NAME} C CXX ASM)
 
 # Linker script
-get_filename_component(LINKER_SCRIPT linker/STM32H735IGKx_FLASH.ld ABSOLUTE)
+get_filename_component(LINKER_SCRIPT linker/STM32H735IGKX_FLASH.ld ABSOLUTE)
 
 # OpenOCD config
 get_filename_component(OPENOCD_CONFIG tools/stm32h735g-dk.cfg ABSOLUTE)
@@ -36,6 +43,10 @@ add_subdirectory(lib)
 
 # Add source
 add_subdirectory(src)
+add_subdirectory(NetXDuo)
+#add_subdirectory(Middlewares/netxduo)
+add_subdirectory(Middlewares/WebRTC/aecm)
+
 
 message(STATUS "========================================")
 message(STATUS "  Project: ${APPLICATION_NAME}")
