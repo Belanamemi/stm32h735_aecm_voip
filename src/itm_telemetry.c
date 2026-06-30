@@ -1,4 +1,5 @@
 #include "itm_telemetry.h"
+<<<<<<< HEAD
 #include <stdarg.h>
 #include <string.h>
 
@@ -35,4 +36,18 @@ int itm_printf(uint32_t channel, const char *format, ...) {
     }
     
     return len;
+=======
+#include <stdio.h>
+#include <stdarg.h>
+
+void itm_init(void) {
+    /* Placeholder ITM init */
+}
+
+void itm_printf(uint32_t channel, const char *format, ...) {
+    va_list args;
+    va_start(args, format);
+    vprintf(format, args);
+    va_end(args);
+>>>>>>> 9b48788c68f9afe210994e7ed4f34295090f6f8b
 }

@@ -1,4 +1,5 @@
 #include "agc_preprocessor.h"
+<<<<<<< HEAD
 #include "itm_telemetry.h"
 #include <math.h>
 #include <string.h>
@@ -55,4 +56,16 @@ void agc_process(AgcProcessor_t *agc, int16_t *frame, uint32_t len) {
 
 float agc_get_gain_db(const AgcProcessor_t *agc) {
     return agc->current_gain_db;
+=======
+#include <string.h>
+
+void agc_init(void) {
+    /* Placeholder */
+}
+
+void agc_process(int16_t *frame, uint16_t len) {
+    /* Placeholder AGC processing */
+    (void)frame;
+    (void)len;
+>>>>>>> 9b48788c68f9afe210994e7ed4f34295090f6f8b
 }

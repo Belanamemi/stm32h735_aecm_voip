@@ -12,6 +12,7 @@ set(DRIVER_SOURCES
     Src/stm32h7xx_hal_rcc.c
     Src/stm32h7xx_hal_rcc_ex.c
     Src/stm32h7xx_hal_cortex.c
+<<<<<<< HEAD
     Src/stm32h7xx_hal_sd.c
     Src/stm32h7xx_hal_sd_ex.c
     Src/stm32h7xx_hal_mmc.c
@@ -21,6 +22,9 @@ set(DRIVER_SOURCES
     Src/stm32h7xx_hal_cortex.c
     Src/stm32h7xx_ll_sdmmc.c
 
+=======
+    Src/stm32h7xx_hal_rcc_ex.c
+>>>>>>> 9b48788c68f9afe210994e7ed4f34295090f6f8b
 )
 
 add_library(stm32h7xx_hal ${DRIVER_SOURCES})

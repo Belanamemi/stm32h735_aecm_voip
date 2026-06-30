@@ -1,4 +1,5 @@
 #include "dwt_delay_measurement.h"
+<<<<<<< HEAD
 #include "itm_telemetry.h"
 
 void dwt_init(void) {
@@ -41,4 +42,22 @@ float dwt_measure_aecm_latency(void) {
     
     dwt_stop(&ts);
     return ts.elapsed_ms;
+=======
+#include "stm32h7xx_hal.h"
+
+void dwt_init(void) {
+    /* Enable DWT */
+    CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+    DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
+}
+
+void dwt_start(DwtTimestamp_t *ts) {
+    ts->start = DWT->CYCCNT;
+}
+
+void dwt_stop(DwtTimestamp_t *ts) {
+    uint32_t end = DWT->CYCCNT;
+    uint32_t cycles = end - ts->start;
+    ts->elapsed_ms = (float)cycles / (520000.0f);  /* 520 MHz */
+>>>>>>> 9b48788c68f9afe210994e7ed4f34295090f6f8b
 }

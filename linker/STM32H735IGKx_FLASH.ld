@@ -75,6 +75,7 @@ SECTIONS
     KEEP (*(.init))
     KEEP (*(.fini))
 
+<<<<<<< HEAD
     . = ALIGN(4);
     _etext = .;        /* define a global symbols at end of code */
   } >FLASH
@@ -175,4 +176,36 @@ SECTIONS
   }
 
   .ARM.attributes 0 : { *(.ARM.attributes) }
+=======
+    .bss :
+    {
+        . = ALIGN(4);
+        _sbss = .;
+        *(.bss*)
+        *(COMMON)
+        . = ALIGN(4);
+        _ebss = .;
+    } >RAM_D1
+
+    /* AEC buffers in fast RAM_D2 */
+    .aec_buffers (NOLOAD) :
+    {
+        . = ALIGN(4);
+        *(.aec_buffers)
+        . = ALIGN(4);
+    } >RAM_D2
+
+    /* RTP/Jitter in RAM_D3 */
+    .rtp_buffers (NOLOAD) :
+    {
+        . = ALIGN(4);
+        *(.rtp_buffers)
+        . = ALIGN(4);
+    } >RAM_D3
+
+    /* Set end of heap for _sbrk */
+    end = .;
+    _end = .;
+    _estack = ORIGIN(RAM_D1) + LENGTH(RAM_D1);
+>>>>>>> 9b48788c68f9afe210994e7ed4f34295090f6f8b
 }
